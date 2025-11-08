@@ -3,71 +3,34 @@
 @tailwind components;
 @tailwind utilities; 
 
-/* :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* === POSTGEN BRAND COLORS === */
+:root {
+  --postgen-sand: #C49B6C;        /* warm sand-copper tone */
+  --postgen-copper: #B87333;      /* deep copper accent */
+  --postgen-gold: #D4AF37;        /* classic gold highlight */
+  --postgen-charcoal: #0A0E12;    /* base background */
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+/* === COLOR HELPERS === */
+.text-sand { color: var(--postgen-sand); }
+.bg-sand { background-color: var(--postgen-sand); }
+.ring-sand { --tw-ring-color: var(--postgen-sand); }
+.fill-sand { fill: var(--postgen-sand); }
+.stroke-sand { stroke: var(--postgen-sand); }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
+.text-copper { color: var(--postgen-copper); }
+.bg-copper { background-color: var(--postgen-copper); }
+.ring-copper { --tw-ring-color: var(--postgen-copper); }
+.fill-copper { fill: var(--postgen-copper); }
+.stroke-copper { stroke: var(--postgen-copper); }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
+.text-gold { color: var(--postgen-gold); }
+.bg-gold { background-color: var(--postgen-gold); }
+.ring-gold { --tw-ring-color: var(--postgen-gold); }
+.fill-gold { fill: var(--postgen-gold); }
+.stroke-gold { stroke: var(--postgen-gold); }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
