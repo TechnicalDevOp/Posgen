@@ -7,19 +7,19 @@ import {
   FaShieldAlt,
   FaMoneyBillWave,
   FaUserTie,
-  FaMapMarkerAlt,
-  FaCalendarAlt,
-  FaUser,
   FaWhatsapp,
   FaFacebookF,
-  FaInstagram,
-  FaTwitter,
-  FaLinkedin,
-  FaYoutube,
+   FaTiktok,
   FaPlaneDeparture,  
   FaQuoteLeft, FaStar, FaChevronLeft, FaChevronRight,
-  FaCommentDots, FaPaperPlane
+  FaCommentDots, FaPaperPlane, 
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
+// import { FaMapMarkerAlt, FaCalendarAlt, FaUser } from "react-icons/fa";
+// import ResultsModal from "../components/ResultsModal.jsx";
+import SearchBar from "../components/SearchBar.jsx";
+import { useNavigate } from "react-router-dom";
+
 
 
 /* ============================== HERO ============================== */
@@ -111,47 +111,180 @@ function Hero() {
   );
 }
 
+/**
+ * SearchBar:
+ * - fetches packages.json from /data/packages.json (option A),
+ * - validates inputs,
+ * - shows modal with matches
+ */
 
+// function SearchBar() {
+//   const [packages, setPackages] = useState([]); // loaded dataset
+//   const [loading, setLoading] = useState(true);
+//   const [openModal, setOpenModal] = useState(false);
+//   const [matches, setMatches] = useState([]);
+//   const navigate = useNavigate();
 
-/* ================ SEARCH (same polished dark-glass) ================ */
-function SearchBar() {
-  return (
-    <div className="relative z-10 w-[92%] md:w-[80%] lg:w-[68%] mt-8" id="book">
-      <form
-        className="rounded-2xl bg-black/45 backdrop-blur-xl border border-white/10 shadow-[0_18px_70px_rgba(0,0,0,.4)] p-4 md:p-5"
-        onSubmit={(e) => e.preventDefault()}
-        aria-label="Search trips"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] gap-3 md:gap-4 items-center">
-          <label className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 ring-1 ring-white/10 focus-within:ring-postgen-gold/60">
-            <FaMapMarkerAlt className="text-postgen-gold text-xl" />
-            <div className="flex-1">
-              <div className="text-[11px] uppercase tracking-wide text-white/60">Location</div>
-              <input className="w-full bg-transparent outline-none text-base text-white placeholder:text-white/60" placeholder="Where are you going?" required />
-            </div>
-          </label>
-          <label className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 ring-1 ring-white/10 focus-within:ring-postgen-gold/60">
-            <FaCalendarAlt className="text-postgen-gold text-xl" />
-            <div className="flex-1">
-              <div className="text-[11px] uppercase tracking-wide text-white/60">Date</div>
-              <input type="date" className="w-full bg-transparent outline-none text-base text-white [color-scheme:dark]" required />
-            </div>
-          </label>
-          <label className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 ring-1 ring-white/10 focus-within:ring-postgen-gold/60">
-            <FaUser className="text-postgen-gold text-xl" />
-            <div className="flex-1">
-              <div className="text-[11px] uppercase tracking-wide text-white/60">Guests</div>
-              <input className="w-full bg-transparent outline-none text-base text-white placeholder:text-white/60" placeholder="+ Add" />
-            </div>
-          </label>
-          <button className="h-14 md:h-[56px] rounded-xl bg-postgen-gold text-postgen-charcoal font-semibold px-8 hover:opacity-90 active:opacity-100 transition" aria-label="Search trips">
-            Search
-          </button>
-        </div>
-      </form>
-    </div>
-  );
-}
+//   // form state
+//   const [form, setForm] = useState({
+//     location: "",
+//     date: "",
+//     guests: 2,
+//   });
+//   const [errors, setErrors] = useState({});
+
+//   // load data (option A: JSON in public folder)
+//   useEffect(() => {
+//     const load = async () => {
+//       try {
+//         const res = await fetch("/data/packages.json");
+//         if (!res.ok) throw new Error("packages not found");
+//         const data = await res.json();
+//         setPackages(data);
+//       } catch (err) {
+//         console.warn("Could not load packages.json — ensure file exists in public/data", err);
+//         setPackages([]); // fallback empty
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+//     load();
+//   }, []);
+
+//   // small validator
+//   const validate = () => {
+//     const e = {};
+//     if (!form.location || form.location.trim().length < 2) {
+//       e.location = "Please enter a location or country.";
+//     }
+//     if (!form.date) e.date = "Pick a date.";
+//     // guests must be 1..20
+//     const g = Number(form.guests);
+//     if (!g || g < 1 || g > 20) e.guests = "Enter 1–20 guests.";
+//     setErrors(e);
+//     return Object.keys(e).length === 0;
+//   };
+
+//   // search function (simple fuzzy match)
+//   const runSearch = (evt) => {
+//     evt?.preventDefault();
+//     if (!validate()) return;
+
+//     const q = form.location.trim().toLowerCase();
+//     // filter packages by city or country or title; you can tweak fields as per your JSON
+//     const found = packages.filter((p) => {
+//       const city = (p.city || "").toLowerCase();
+//       const country = (p.country || "").toLowerCase();
+//       const title = (p.title || "").toLowerCase();
+//       // match location input anywhere and optional date/guest filters (example uses nights)
+//       const locationMatch = city.includes(q) || country.includes(q) || title.includes(q);
+//       // optional: limit by capacity or month (if your JSON has these fields)
+//       return locationMatch;
+//     });
+
+//     setMatches(found);
+//     setOpenModal(true);
+//   };
+
+//   return (
+//     <>
+//       <div className="relative z-10 w-[92%] md:w-[80%] lg:w-[68%] mt-8" id="book">
+//         <form
+//           className="rounded-2xl bg-black/45 backdrop-blur-xl border border-white/10 shadow-[0_18px_70px_rgba(0,0,0,.4)] p-4 md:p-5"
+//           onSubmit={runSearch}
+//           aria-label="Search trips"
+//         >
+//           <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] gap-3 md:gap-4 items-center">
+//             <label
+//               className={`flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 ring-1 ring-white/10 ${
+//                 errors.location ? "ring-red-500" : "focus-within:ring-sand"
+//               }`}
+//             >
+//               <FaMapMarkerAlt className="text-sand text-xl" />
+//               <div className="flex-1">
+//                 <div className="text-[11px] uppercase tracking-wide text-white/60">Location</div>
+//                 <input
+//                   value={form.location}
+//                   onChange={(e) => setForm((p) => ({ ...p, location: e.target.value }))}
+//                   className="w-full bg-transparent outline-none text-base text-white placeholder:text-white/60"
+//                   placeholder="Where are you going?"
+//                   required
+//                 />
+//                 {errors.location && <div className="text-xs text-red-400 mt-1">{errors.location}</div>}
+//               </div>
+//             </label>
+
+//             <label
+//               className={`flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 ring-1 ring-white/10 ${
+//                 errors.date ? "ring-red-500" : "focus-within:ring-sand"
+//               }`}
+//             >
+//               <FaCalendarAlt className="text-sand text-xl" />
+//               <div className="flex-1">
+//                 <div className="text-[11px] uppercase tracking-wide text-white/60">Date</div>
+//                 <input
+//                   type="date"
+//                   value={form.date}
+//                   onChange={(e) => setForm((p) => ({ ...p, date: e.target.value }))}
+//                   className="w-full bg-transparent outline-none text-base text-white [color-scheme:dark]"
+//                   required
+//                 />
+//                 {errors.date && <div className="text-xs text-red-400 mt-1">{errors.date}</div>}
+//               </div>
+//             </label>
+
+//             <label
+//               className={`flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 ring-1 ring-white/10 ${
+//                 errors.guests ? "ring-red-500" : "focus-within:ring-sand"
+//               }`}
+//             >
+//               <FaUser className="text-sand text-xl" />
+//               <div className="flex-1">
+//                 <div className="text-[11px] uppercase tracking-wide text-white/60">Guests</div>
+//                 <input
+//                   type="number"
+//                   min={1}
+//                   max={20}
+//                   value={form.guests}
+//                   onChange={(e) => setForm((p) => ({ ...p, guests: e.target.value }))}
+//                   className="w-full bg-transparent outline-none text-base text-white placeholder:text-white/60"
+//                   placeholder="+ Add"
+//                 />
+//                 {errors.guests && <div className="text-xs text-red-400 mt-1">{errors.guests}</div>}
+//               </div>
+//             </label>
+
+//             <div className="flex gap-2">
+//               <button
+//                 type="submit"
+//                 className="h-14 md:h-[56px] rounded-xl bg-sand text-postgen-charcoal font-semibold px-6 hover:opacity-90 active:opacity-100 transition"
+//                 aria-label="Search trips"
+//               >
+//                 Search
+//               </button>
+
+//               {/* <button
+//                 type="button"
+//                 onClick={() => navigate("/services/travel-packages")}
+//                 className="h-14 md:h-[56px] rounded-xl bg-white/5 text-white font-semibold px-4 hover:opacity-90 transition"
+//                 aria-label="View all packages"
+//               >
+//                 View all
+//               </button> */}
+//             </div>
+//           </div>
+//         </form>
+//       </div>
+
+//       <ResultsModal
+//         open={openModal}
+//         onClose={() => setOpenModal(false)}
+//         matches={matches}
+//         query={{ ...form }}
+//       />
+//     </>
+//   );
+// }
 
 
 
@@ -293,7 +426,7 @@ function Chatbot() {
             {/* Header */}
             <div className="px-4 py-3 flex items-center justify-between border-b border-white/10">
               <div>
-                <div className="text-white font-semibold">Postgen Assistant</div>
+                <div className="text-white font-semibold">Posgen Assistant</div>
                 <div className="text-xs text-white/60">Online • replies in seconds</div>
               </div>
               <button
@@ -558,7 +691,7 @@ function ExperienceSection() {
         <div className="text-center mb-12">
           {/* <p className="text-white/70 text-sm tracking-wide">Our Story of Excellence</p> */}
           <h2 className="font-display text-3xl md:text-5xl">
-            The <span className="text-sand">Postgen Experience</span>
+            The <span className="text-sand">Posgen Experience</span>
           </h2>
           {/* <p className="mt-4 text-white/80 max-w-2xl mx-auto">
             For over a decade, Postgen Traveling Consult has redefined travel across Africa and beyond —
@@ -599,42 +732,155 @@ function ExperienceSection() {
 
 
 /* ============================ DEALS SECTION =========================== */
-const DEALS = [
-  { city: "Munich", from: "Accra", price: "from GHS 5,299", miles: "23,400 miles", img: "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?q=80&w=1600&auto=format&fit=crop", tag: "Round trip · Economy" },
-  { city: "Dammam", from: "Accra", price: "from GHS 4,899", miles: "21,150 miles", img: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1600&auto=format&fit=crop", tag: "Round trip · Economy" },
-  { city: "Krabi", from: "Accra", price: "from GHS 6,450", miles: "27,450 miles", img: "https://images.unsplash.com/photo-1526481280698-8fcc13fd9b85?q=80&w=1600&auto=format&fit=crop", tag: "Round trip · Economy" },
-  { city: "Peshawar", from: "Accra", price: "from GHS 5,999", miles: "22,840 miles", img: "https://images.unsplash.com/photo-1603262110263-fb0112e7cc33?q=80&w=1600&auto=format&fit=crop", tag: "Round trip · Economy" },
-  { city: "Medina", from: "Accra", price: "from GHS 4,740", miles: "20,120 miles", img: "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?q=80&w=1600&auto=format&fit=crop", tag: "Round trip · Economy" },
-];
+// Replace your existing DealsSection + DealCard with this code
+// import { useEffect, useRef, useState } from "react";
+// import { Link } from "react-router-dom";
 
-function DealsSection() {
-  const [i, setI] = useState(2);
-  const next = () => setI((p) => (p + 1) % DEALS.length);
-  const prev = () => setI((p) => (p - 1 + DEALS.length) % DEALS.length);
+/* small helpers (matching your data shape) */
+function slugify(text = "") {
+  return String(text || "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+function getCountryFromRow(p) { return (p && (p[""] || p.country || p.Country || "") || "").toString(); }
+function getVisaFromRow(p) { return (p && (p._1 || p.visaType || p._type || "") || "").toString(); }
+function getRoleFromRow(p) { return (p && (p._2 || p.role || "") || "").toString(); }
+function parseCostAndCurrency(p) {
+  const fields = [p && p._7, p && p._5, p && p.cost, p && p.salary, p && p.COST, p && p["COST"], p && p._8]
+    .filter(Boolean).map(String);
+  const joined = fields.join(" ").replace(/\u00A0/g, " ");
+  const currencyMatch = joined.match(/\b(USD|EUR|GHS|AED|QAR|CAD|GBP|US\$|€|dollars|euros|cedis)\b/i);
+  let currency = currencyMatch ? currencyMatch[0] : null;
+  if (currency) {
+    currency = currency.replace("US$", "USD").replace("€", "EUR").toUpperCase();
+    if (/dollars/i.test(currency)) currency = "USD";
+    if (/euros/i.test(currency)) currency = "EUR";
+    if (/cedis/i.test(currency)) currency = "GHS";
+  }
+  const numMatch = joined.replace(/[,]/g, "").match(/(\d+(\.\d+)?)/);
+  const amount = numMatch ? Number(numMatch[0]) : null;
+  const raw = fields.length ? fields[0] : "";
+  return { amount, currency, raw };
+}
+
+/* Build image candidates:
+   - local: /images/<slug>.jpg (works if files are in public/images/)
+   - unsplash: https://source.unsplash.com/800x600/?<country>
+   - placeholder: /images/placeholder.jpg
+*/
+function buildImageCandidates(country) {
+  const slug = slugify(country || "placeholder");
+  return {
+    local: `/images/${slug}.jpg`,
+    unsplash: `https://source.unsplash.com/800x600/?${encodeURIComponent(country || "travel")}`,
+    placeholder: `/images/placeholder.jpg`,
+  };
+}
+
+/* DealsSection - loads tourist/visit packages and displays them */
+export function DealsSection() {
+  const [i, setI] = useState(0);
+  const [deals, setDeals] = useState([]);
+  const next = () => setI((p) => (p + 1) % deals.length);
+  const prev = () => setI((p) => (p - 1 + deals.length) % deals.length);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await fetch("/data/packages_clean.json");
+        if (!res.ok) throw new Error("packages JSON not found");
+        const arr = await res.json();
+
+        const tourist = [];
+        for (let idx = 0; idx < arr.length; idx += 1) {
+          const row = arr[idx];
+          const visa = (getVisaFromRow(row) || "").toLowerCase();
+          // include tourist/visit visitor/tour
+          if (/tourist|visit|visitor|tour/i.test(visa)) {
+            const country = getCountryFromRow(row) || "Unknown";
+            const role = getRoleFromRow(row) || "Tourist Visa";
+            const { amount, currency, raw } = parseCostAndCurrency(row);
+            const priceLabel = amount != null ? `from ${currency || "GHS"} ${amount.toLocaleString()}` : (raw || "Contact us");
+            const imgs = buildImageCandidates(country);
+
+            tourist.push({
+              id: `${slugify(country)}-${idx}`,
+              city: country,
+              from: role,
+              price: priceLabel,
+              miles: row._miles || row.miles || "",
+              imgLocal: imgs.local,
+              imgUnsplash: imgs.unsplash,
+              imgPlaceholder: imgs.placeholder,
+              tag: "Tourist Visa",
+              pkgIndex: idx,
+              rawPackage: row,
+            });
+          }
+        }
+
+        // choose up to 5 deals (or fewer)
+        const top = tourist.slice(0, 5);
+        if (mounted) {
+          setDeals(top);
+          setI(0);
+        }
+      } catch (err) {
+        console.error("DealsSection load error:", err);
+        if (mounted) setDeals([]);
+      }
+    })();
+    return () => (mounted = false);
+  }, []);
+
+  if (!deals || deals.length === 0) {
+    return (
+      <section className="bg-[#0A0E12] text-white py-12">
+        <div className="max-w-7xl mx-auto px-5 text-center">
+          <p className="text-white/70">Discover our tourist visa packages</p>
+          <h2 className="font-display text-3xl md:text-4xl">Hot <span className="text-sand">Deals</span></h2>
+          <p className="mt-4 text-white/60">No deals available right now — visit the tourist visa page for full offers.</p>
+          <div className="mt-6">
+            <Link to="/services/tourist-visa" className="px-4 py-2 rounded-lg bg-sand text-black font-semibold">View tourist visa packages</Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="bg-[#0A0E12] text-white py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-5">
         <div className="flex items-end justify-between mb-10">
           <div>
-            <p className="text-white/70 text-sm">Let us inspire your next trip</p>
-            <h2 className="font-display text-3xl md:text-5xl">Our Hot <span className="text-copper">Deals</span></h2>
+            <p className="text-white/70 text-sm">Top tourist visa packages</p>
+            <h2 className="font-display text-3xl md:text-5xl">Our Hot <span className="text-sand">Deals</span></h2>
           </div>
-          <a className="text-sand font-semibold hover:opacity-90" href="#">View all</a>
+
+          <Link to="/services/tourist-visa" className="text-sand font-semibold hover:opacity-90">
+            View all
+          </Link>
         </div>
 
         <div className="relative">
           <div className="relative h-[360px] md:h-[420px]">
-            {DEALS.map((d, idx) => {
-              const pos = (idx - i + DEALS.length) % DEALS.length;
-              const norm = pos > DEALS.length / 2 ? pos - DEALS.length : pos;
+            {deals.map((d, idx) => {
+              const pos = (idx - i + deals.length) % deals.length;
+              const norm = pos > deals.length / 2 ? pos - deals.length : pos;
               const translate = norm * 220;
               const scale = 1 - Math.abs(norm) * 0.12;
               const z = 10 - Math.abs(norm);
               const opacity = 1 - Math.abs(norm) * 0.25;
               return (
-                <article key={idx} className="absolute left-1/2 top-1/2"
-                  style={{ transform: `translate(-50%, -50%) translateX(${translate}px) scale(${scale})`, zIndex: z, opacity, transition: "transform 450ms ease, opacity 300ms ease" }}>
+                <article
+                  key={d.id}
+                  className="absolute left-1/2 top-1/2"
+                  style={{
+                    transform: `translate(-50%, -50%) translateX(${translate}px) scale(${scale})`,
+                    zIndex: z,
+                    opacity,
+                    transition: "transform 450ms ease, opacity 300ms ease",
+                  }}
+                >
                   <DealCard deal={d} active={norm === 0} />
                 </article>
               );
@@ -645,11 +891,18 @@ function DealsSection() {
             <button onClick={prev} className="size-9 grid place-items-center rounded-full border border-white/20 hover:bg-white/10" aria-label="Previous">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 6L9 12l6 6" stroke="currentColor" strokeWidth="2"/></svg>
             </button>
+
             <div className="flex gap-2">
-              {DEALS.map((_, idx) => (
-                <button key={idx} onClick={() => setI(idx)} className={`h-2 rounded-full transition-all ${i === idx ? "w-6 bg-postgen-gold" : "w-2 bg-white/35"}`} aria-label={`Go to slide ${idx + 1}`} />
+              {deals.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setI(idx)}
+                  className={`h-2 rounded-full transition-all ${i === idx ? "w-6 bg-postgen-gold" : "w-2 bg-white/35"}`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
               ))}
             </div>
+
             <button onClick={next} className="size-9 grid place-items-center rounded-full border border-white/20 hover:bg-white/10" aria-label="Next">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2"/></svg>
             </button>
@@ -660,14 +913,45 @@ function DealsSection() {
   );
 }
 
-function DealCard({ deal, active }) {
+/* DealCard: robust fallback handling (local -> unsplash -> placeholder) */
+export function DealCard({ deal, active }) {
+  const triedRef = useRef({ unsplash: false });
+  const [src, setSrc] = useState(deal.imgLocal || deal.imgUnsplash || deal.imgPlaceholder);
+
+  useEffect(() => {
+    // reset when deal changes
+    setSrc(deal.imgLocal || deal.imgUnsplash || deal.imgPlaceholder);
+    triedRef.current.unsplash = false;
+  }, [deal]);
+
+  const handleImgError = (e) => {
+    // try Unsplash once if we haven't yet and there is a fallback url
+    if (!triedRef.current.unsplash && deal.imgUnsplash && e.currentTarget.src !== deal.imgUnsplash) {
+      triedRef.current.unsplash = true;
+      setSrc(deal.imgUnsplash);
+      return;
+    }
+    // otherwise final fallback
+    if (e.currentTarget.src !== deal.imgPlaceholder) {
+      setSrc(deal.imgPlaceholder);
+    }
+  };
+
   return (
-    <div className="w-[240px] h-[300px] md:w-[420px] md:h-[280px] rounded-3xl overflow-hidden relative ring-1 ring-white/10">
-      <img src={deal.img} alt={deal.city} className="absolute inset-0 w-full h-full object-cover" loading="lazy" sizes="(max-width: 768px) 240px, 420px" />
+    <div className="w-[240px] h-[300px] md:w-[420px] md:h-[280px] rounded-3xl overflow-hidden relative ring-1 ring-white/10 shadow-lg bg-[#071018]">
+      <img
+        src={src}
+        alt={deal.city}
+        className="absolute inset-0 w-full h-full object-cover"
+        loading="lazy"
+        onError={handleImgError}
+      />
+
       <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
       <div className="absolute left-4 top-3">
         <span className="text-[11px] md:text-xs px-3 py-1 rounded-full bg-white/85 text-black/80">{deal.tag}</span>
       </div>
+
       <div className="absolute inset-x-0 bottom-0 p-4 md:p-5 text-white">
         <div className="text-sm opacity-80">{deal.from}</div>
         <div className="text-xl md:text-2xl font-semibold">{deal.city}</div>
@@ -676,11 +960,28 @@ function DealCard({ deal, active }) {
           <span className="opacity-70">•</span>
           <span>{deal.miles}</span>
         </div>
+
+        <div className="mt-3">
+          <Link
+            to={`/package/${slugify(deal.city)}-${deal.pkgIndex}`}
+            state={{
+              pkg: deal.rawPackage,            // full package row object
+              image: src,                      // current image URL (optional)
+              pkgId: `${slugify(deal.city)}-${deal.pkgIndex}`,
+              originalIndex: deal.pkgIndex
+            }}
+            className="inline-block px-3 py-2 rounded-lg bg-sand text-black font-semibold text-sm"
+           >
+            See Package
+        </Link>
+        </div>
       </div>
+
       <div className={`absolute inset-0 rounded-3xl ring-2 ${active ? "ring-postgen-gold/60" : "ring-transparent"}`} />
     </div>
   );
 }
+
 
 
 
@@ -753,7 +1054,7 @@ function WhyChoosePostgen() {
           <div className="mb-10 text-center lg:text-left">
             <p className="text-white/70 text-sm tracking-wide">Why travelers trust us</p>
             <h2 className="font-display text-3xl md:text-5xl mt-2">
-              Why choose <span className="text-sand">Postgen</span>
+              Why choose <span className="text-sand">Posgen</span>
             </h2>
             <p className="mt-4 text-white/80 max-w-2xl mx-auto lg:mx-0">
               We make travel effortless. Combining concierge service, expert guidance, and exclusive partnerships to deliver peace of mind — every time you fly.
@@ -999,100 +1300,112 @@ function Testimonials() {
   );
 }
 
-function MapSection() {
-  // Accra center (change to your exact coords if you have them)
-  const lat = 5.6037;
-  const lon = -0.1870;
-  const zoom = 13;
 
-  // OpenStreetMap embed URL (no API key needed)
-  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${lon - 0.04}%2C${lat - 0.03}%2C${lon + 0.04}%2C${lat + 0.03}&layer=mapnik&marker=${lat}%2C${lon}`;
 
-  // Direct map links for directions
-  const gmaps = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
-  const apple = `https://maps.apple.com/?q=${lat},${lon}`;
-  const osm = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=${zoom}/${lat}/${lon}`;
+const POSGEN_BRANCHES = [
+  {
+    city: "Accra",
+    address: "Anyaa-Awoshie Road, Ablekuma Fanmilk, Ga Central Municipal District, Accra, Ghana",
+    phone: "+233 24 395 5621",
+    email: "posgentravelingconsult@gmail.com",
+    lat: 5.6037,
+    lon: -0.1870,
+  },
+  {
+    city: "Kumasi",
+    address: "Ayeduase Gate, Kumasi, Ghana",
+    phone: "+233 54 777 1233",
+    email: "posgentravelingconsult@gmail.com",
+    lat: 6.6885,
+    lon: -1.6244,
+  },
+  {
+    city: "Tamale",
+    address: "Buy water Area, Tamale, Ghana",
+    phone: "+233 55 312 4987",
+    email: "posgentravelingconsult@gmail.com",
+    lat: 4.8845,
+    lon: -1.7554,
+  },
+];
 
+
+function BranchesSection() {
   return (
-    <section id="contact" className="relative bg-[#0A0E12] text-white">
-      <div className="relative max-w-[1600px] mx-auto px-5 py-16 md:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_.8fr] gap-8 items-stretch">
-          {/* Map */}
-          <div className="relative rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-[0_20px_60px_rgba(0,0,0,.35)]">
-            <iframe
-              title="Postgen Office Location"
-              src={src}
-              className="w-full h-[340px] md:h-[520px] border-0"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-            {/* Optional subtle gradient top for style */}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-black/0" />
-          </div>
+    <section className="bg-[#0A0E12] text-white py-16 md:py-24">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Heading */}
+        <div className="text-center mb-12">
+          <p className="text-white/70 text-sm">Visit our offices</p>
+          <h2 className="font-display text-3xl md:text-5xl">
+            Posgen <span className="text-sand">Branches</span>
+          </h2>
+        </div>
 
-          {/* Contact card */}
-          <div className="rounded-3xl bg-white/5 backdrop-blur-xl ring-1 ring-white/10 p-6 md:p-8 flex flex-col justify-between shadow-[0_20px_60px_rgba(0,0,0,.35)]">
-            <div>
-              <h3 className="font-display text-2xl md:text-3xl mb-2">Visit Postgen</h3>
-              <p className="text-white/80">
-                Postgen Traveling Consult<br />
-                Accra, Ghana
-              </p>
+        {/* Branch cards */}
+        <div className="grid md:grid-cols-3 gap-8">
+          {POSGEN_BRANCHES.map((b, i) => {
+            const googleEmbed = `https://www.google.com/maps?q=${b.lat},${b.lon}&z=15&output=embed`;
+            const googleMaps = `https://www.google.com/maps/search/?api=1&query=${b.lat},${b.lon}`;
+            const appleMaps = `https://maps.apple.com/?q=${b.lat},${b.lon}`;
 
-              <div className="mt-6 space-y-3 text-sm">
-                <div className="flex gap-3">
-                  <span className="text-sand">Hours:</span>
-                  <span className="text-white/80">Mon–Sat, 9:00–18:00</span>
+            return (
+              <div
+                key={i}
+                className="rounded-3xl bg-white/5 ring-1 ring-white/10 p-6 hover:ring-sand transition"
+              >
+                <h3 className="text-xl font-semibold mb-1">{b.city}</h3>
+                <p className="text-sm text-white/80 mb-3">{b.address}</p>
+
+                <div className="text-sm space-y-1 mb-4">
+                  <p>
+                    <span className="text-sand">Phone:</span>{" "}
+                    <a href={`tel:${b.phone}`} className="hover:underline">
+                      {b.phone}
+                    </a>
+                  </p>
+                  <p>
+                    <span className="text-sand">Email:</span>{" "}
+                    <a href={`mailto:${b.email}`} className="hover:underline">
+                      {b.email}
+                    </a>
+                  </p>
                 </div>
-                <div className="flex gap-3">
-                  <span className="text-sand">Phone:</span>
-                  <a href="tel:+233555000000" className="text-white/90 hover:underline">+233 55 500 0000</a>
+
+                {/* Google Map Embed */}
+                <div className="rounded-xl overflow-hidden ring-1 ring-white/10 mb-4">
+                  <iframe
+                    title={`${b.city} Google Map`}
+                    src={googleEmbed}
+                    className="w-full h-[220px] border-0"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
                 </div>
+
+                {/* Actions */}
                 <div className="flex gap-3">
-                  <span className="text-sand">Email:</span>
-                  <a href="mailto:hello@postgen.travel" className="text-white/90 hover:underline">hello@postgen.travel</a>
+                  <a
+                    href={googleMaps}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 text-center px-4 py-2 rounded-lg bg-sand text-black font-semibold text-sm hover:opacity-90"
+                  >
+                    Google Maps
+                  </a>
+
+                  <a
+                    href={appleMaps}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 text-center px-4 py-2 rounded-lg bg-white/10 ring-1 ring-white/15 text-white text-sm hover:bg-white/15"
+                  >
+                    Apple Maps
+                  </a>
                 </div>
               </div>
-            </div>
-
-            {/* Actions */}
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <a
-                href={gmaps}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-3 rounded-xl bg-sand text-black font-semibold text-center hover:opacity-90 transition"
-              >
-                Google Maps
-              </a>
-              <a
-                href={apple}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-3 rounded-xl bg-white/10 ring-1 ring-white/15 text-white text-center hover:bg-white/15 transition"
-              >
-                Apple Maps
-              </a>
-              <a
-                href={osm}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-3 rounded-xl bg-white/10 ring-1 ring-white/15 text-white text-center hover:bg-white/15 transition"
-              >
-                OpenStreetMap
-              </a>
-            </div>
-
-            {/* Optional WhatsApp CTA inline (you already have a floating one) */}
-            <a
-              href="https://wa.me/233555000000"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 inline-block text-sm text-white/80 hover:text-white underline"
-            >
-              Chat on WhatsApp
-            </a>
-          </div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -1151,11 +1464,22 @@ function Footer() {
           </div>
           <button className="px-5 py-2 rounded-full border border-white/20 text-white text-sm hover:bg-white/10 transition">Give Feedback</button>
           <div className="flex items-center gap-4 text-white/70">
-            <a href="#"><FaFacebookF /></a>
-            <a href="#"><FaInstagram /></a>
-            <a href="#"><FaTwitter /></a>
-            <a href="#"><FaLinkedin /></a>
-            <a href="#"><FaYoutube /></a>
+           <a aria-label="Facebook" href="https://www.facebook.com/groups/231168604875524/?ref=share&mibextid=NSMWBT" target="_blank" rel="noreferrer" className="hover:text-postgen-gold">
+                           <FaFacebookF />
+                         </a>
+            <a
+                            aria-label="TikTok"
+                            href="https://www.tiktok.com/@posgen"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="hover:text-postgen-gold"
+                          >
+                            <FaTiktok />
+                          </a>
+            {/* <a href="#"><FaInstagram /></a> */}
+            {/* <a href="#"><FaTwitter /></a> */}
+            {/* <a href="#"><FaLinkedin /></a> */}
+            {/* <a href="#"><FaYoutube /></a> */}
           </div>
         </div>
 
@@ -1178,12 +1502,13 @@ export default function Home() {
     <>
       <Navbar />
       <Hero />
+      {/* <SearchBar /> */}
       <Chatbot />  
       <ExperienceSection /> 
       <DealsSection />
       <WhyChoosePostgen />
       <Testimonials /> 
-      <MapSection />  
+      <BranchesSection />
       <Footer />
     </>
   );

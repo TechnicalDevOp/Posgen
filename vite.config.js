@@ -7,13 +7,16 @@ export default defineConfig({
     react(),
     tailwindcss({
       theme: {
-        extend: {
-          colors: {
-            postgen: {
-              gold: "#D8B56A",
-              charcoal: "#0C0C0C",
-              sand: "#F5F2E7",
-            },
+  extend: {
+    colors: {
+      posgen: {
+        red: "#C62828",
+        green: "#2E7D32",
+        gold: "#F4A261",
+        black: "#0B0F14",
+        dark: "#111827",
+        white: "#FFFFFF",
+      },
           },
           fontFamily: {
             display: ['"Playfair Display"', "serif"],
@@ -24,3 +27,6 @@ export default defineConfig({
     }),
   ],
 });
+
+
+  

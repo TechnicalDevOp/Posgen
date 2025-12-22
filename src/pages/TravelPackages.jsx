@@ -169,10 +169,10 @@ export default function TravelPackages() {
             <div>
               <nav className="text-xs text-white/60 mb-2">
                 <span className="hover:text-white/80">Home</span> <span className="opacity-40">/</span>{" "}
-                <span className="text-white/80">Travel Packages</span>
+                <span className="text-white/80">Holiday Packages</span>
               </nav>
               <h1 className="text-4xl md:text-6xl font-display leading-tight">
-                Curated <span className="text-sand">Travel Packages</span>
+                Curated <span className="text-sand">Holiday Packages</span>
               </h1>
               <p className="mt-3 text-white/80 max-w-2xl">
                 Handpicked experiences with flights, stays and tours—planned perfectly for you by Postgen.

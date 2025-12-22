@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import Navbar from "../components/Nav";
 import Footer from "../components/foot";
-// import Contactform from "../components/contactform";
 import FloatingActions from "../components/FloatingActions"; // if you didn’t add globally in App
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaClock } from "react-icons/fa";
-import ContactForm from "../components/contactform";
+import ContactModal from "../components/ContactModal"; 
 
 export default function Contact() {
   const [openContact, setOpenContact] = useState(true); // open by default if you want popup
   // set to false if you want the user to click the button to open
+  
 
   return (
     <main className="bg-[#0A0E12] text-white min-h-screen">
@@ -23,12 +23,7 @@ export default function Contact() {
           <p className="mt-3 text-white/75 max-w-2xl">
             We’re here to help with bookings, packages, guided tours, and custom travel plans.
           </p>
-          <button
-            onClick={() => setOpenContact(true)}
-            className="mt-6 px-6 py-3 rounded-full bg-sand text-black font-semibold hover:opacity-95 transition"
-          >
-            Open Contact Form
-          </button>
+        
         </div>
       </section>
 
@@ -94,12 +89,14 @@ export default function Contact() {
               </ul>
             </div>
             <div className="mt-6 flex flex-wrap gap-3">
-              <button
-                onClick={() => setOpenContact(true)}
-                className="px-5 py-3 rounded-lg bg-sand text-black font-semibold hover:opacity-95 transition"
-              >
-                Open Form
-              </button>
+            <button
+              onClick={() => setOpenContact(true)}
+              className="px-5 py-3 rounded-lg bg-sand text-black font-semibold hover:opacity-95 transition"
+            >
+              Open Form
+            </button>
+
+        <ContactModal open={openContact} onClose={() => setOpenContact(false)} />
               <a
                 href="https://wa.me/233555000000"
                 target="_blank"
@@ -114,9 +111,6 @@ export default function Contact() {
       </section>
 
       <Footer />
-
-      {/* Contact modal (validated) */}
-      {/* <Contactform open={openContact} onClose={() => setOpenContact(false)} /> */}
 
       {/* Floating bubbles (if not already global in App.jsx) */}
       <FloatingActions />

@@ -3,6 +3,14 @@
 @tailwind components;
 @tailwind utilities; 
 
+/* :root {
+  --posgen-red: #C62828;
+  --posgen-green: #2E7D32;
+  --posgen-gold: #F4A261;
+  --posgen-black: #0B0F14;
+  --posgen-dark: #111827;
+  --posgen-white: #FFFFFF;
+} */
 
 
 /* === POSTGEN BRAND COLORS === */
@@ -34,3 +42,18 @@
 
 /* Smooth scrolling */
 html { scroll-behavior: smooth; }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-slideUp {
+  animation: slideUp 0.35s ease-out;
+}
