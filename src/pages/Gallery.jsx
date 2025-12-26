@@ -3,40 +3,54 @@ import Footer from "../components/foot";
 
 const galleryImages = [
   {
-    src: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957",
-    title: "International Flights",
+    src: "images/gallery17.jpeg",
+    // title: "International Flights",
   },
   {
-    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
-    title: "Luxury Destinations",
+    // src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+    src: "images/gallery16.jpeg",
+    // title: "Luxury Destinations",
   },
   {
-    src: "https://images.unsplash.com/photo-1502920514313-52581002a659",
-    title: "Airport Experience",
+    // src: "https://images.unsplash.com/photo-1502920514313-52581002a659",
+    src: "images/gallery2.jpeg",
+    // title: "Airport Experience",
   },
   {
-    src: "https://images.unsplash.com/photo-1526772662000-3f88f10405ff",
-    title: "Tour Adventures",
+    // src: "https://images.unsplash.com/photo-1526772662000-3f88f10405ff",
+    src: "images/gallery27.jpeg",
+    // title: "Tour Adventures",
   },
   {
-    src: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-    title: "Beach Getaways",
+    // src: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+    // src: "images/gallery28.jpeg",
+    // title: "Beach Getaways",
   },
   {
-    src: "https://images.unsplash.com/photo-1488646953014-85cb44e25828",
-    title: "City Escapes",
+    // src: "https://images.unsplash.com/photo-1488646953014-85cb44e25828",
+    src: "images/gallery5.jpeg",
+    // title: "City Escapes",
   },
   {
-    src: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c",
-    title: "Dubai Experience",
+    // src: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c",
+    // src: "images/gallery6.jpeg",
+    // title: "Dubai Experience",
   },
   {
-    src: "https://images.unsplash.com/photo-1494475673543-6a6a27143b16",
-    title: "Mountain Views",
+    // src: "https://images.unsplash.com/photo-1494475673543-6a6a27143b16",
+    // src: "images/gallery12.jpeg",
+    // title: "Mountain Views",
   },
   {
-    src: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
-    title: "Nature Tours",
+    // src: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
+    src: "images/gallery10.jpeg",
+    // title: "Nature Tours",
+  },
+
+    {
+    // src: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c",
+    src: "images/gallery9.jpeg",
+    // title: "Dubai Experience",
   },
 ];
 

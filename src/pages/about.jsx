@@ -112,11 +112,11 @@ export function TeamSection() {
                     {/* Image */}
                     <div className="relative overflow-hidden">
                      <img
-  src={member.img}
-  alt={member.name}
-  className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-500"
-  style={{ objectPosition: member.position }}
-/>
+                        src={member.img}
+                        alt={member.name}
+                        className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-500"
+                        style={{ objectPosition: member.position }}
+                      />
 
 
                       {/* Branch Badge */}

@@ -27,6 +27,7 @@ export default function Navbar() {
   const location = useLocation();
   const dropdownRef = useRef(null);
 
+  /* Scroll effect */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     onScroll();
@@ -34,31 +35,32 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /* Close menus on route change */
   useEffect(() => {
-    // close mobile & dropdown on route change
     setOpenMobile(false);
     setOpenServices(false);
     setMobileServicesOpen(false);
-    // scroll top
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
+  /* Lock body scroll on mobile menu */
   useEffect(() => {
     document.body.style.overflow = openMobile ? "hidden" : "";
     return () => (document.body.style.overflow = "");
   }, [openMobile]);
 
-  // close dropdown when clicking outside
+  /* Click outside dropdown */
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (!dropdownRef.current) return;
-      if (!dropdownRef.current.contains(e.target)) setOpenServices(false);
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpenServices(false);
+      }
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // keyboard: escape closes menus
+  /* Escape key closes menus */
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") {
@@ -72,13 +74,14 @@ export default function Navbar() {
   }, []);
 
   const link =
-    "px-2 py-2 text-sm text-white/80 hover:text-sand transition duration-200";
+    "px-2 py-2 text-sm text-white/80 hover:text-sand transition";
   const active = "font-semibold text-sand border-b-2 border-sand";
 
   const handleMouseEnter = () => {
     clearTimeout(timeoutRef.current);
     setOpenServices(true);
   };
+
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       if (!hoveringDropdown) setOpenServices(false);
@@ -94,65 +97,58 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto h-16 px-5 flex items-center justify-between text-white">
-        {/* Brand */}
+        {/* LOGO */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-lg bg-black/70 grid place-items-center ring-1 ring-white/10 overflow-hidden">
+          <div className="w-9 h-9 rounded-lg bg-black/70 ring-1 ring-white/10 overflow-hidden">
             <img
               src="/images/logo.jpeg"
               alt="Posgen Logo"
               className="w-full h-full object-contain p-1"
-              loading="eager"
             />
           </div>
-
           <div className="leading-tight">
             <div className="font-display text-lg">Posgen</div>
             <div className="text-[11px] text-white/60 -mt-0.5">
               Traveling Consult
             </div>
           </div>
-      </Link>
+        </Link>
 
-        {/* Desktop Nav */}
+        {/* DESKTOP NAV */}
         <nav className="hidden md:flex items-center gap-6">
           <Link to="/" className={`${link} ${location.pathname === "/" ? active : ""}`}>
             Home
           </Link>
 
-          <Link
-            to="/about"
-            className={`${link} ${location.pathname.startsWith("/about") ? active : ""}`}
-          >
+          <Link to="/about" className={`${link} ${location.pathname.startsWith("/about") ? active : ""}`}>
             About Us
           </Link>
 
-          {/* Services Dropdown */}
+          <Link to="/gallery" className={`${link} ${location.pathname === "/gallery" ? active : ""}`}>
+            Gallery
+          </Link>
+
+          {/* SERVICES DROPDOWN */}
           <div
-            className="relative services-menu"
+            className="relative"
+            ref={dropdownRef}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            ref={dropdownRef}
           >
             <button
               className={`${link} inline-flex items-center gap-2`}
-              aria-haspopup="true"
-              aria-expanded={openServices}
               onClick={(e) => {
                 e.stopPropagation();
                 setOpenServices((s) => !s);
               }}
             >
               Services
-              <span className="opacity-80 transition-transform">
-                {openServices ? <FaChevronUp /> : <FaChevronDown />}
-              </span>
+              {openServices ? <FaChevronUp /> : <FaChevronDown />}
             </button>
 
-            {/* Dropdown Menu */}
             {openServices && (
               <div
-                className="absolute left-1/2 -translate-x-1/2 mt-3 w-[640px] max-w-[94vw] rounded-2xl bg-[#0E1318] ring-1 ring-white/10 shadow-2xl p-5 transition-all duration-200"
-                role="menu"
+                className="absolute left-1/2 -translate-x-1/2 mt-3 w-[640px] max-w-[94vw] rounded-2xl bg-[#0E1318] ring-1 ring-white/10 shadow-2xl p-5"
                 onMouseEnter={() => setHoveringDropdown(true)}
                 onMouseLeave={() => {
                   setHoveringDropdown(false);
@@ -160,101 +156,37 @@ export default function Navbar() {
                 }}
               >
                 <div className="grid grid-cols-2 gap-3">
-                  {/* first column - Visit & Tourist */}
+                  {/* COLUMN 1 */}
                   <div className="space-y-2">
-                    <Link
-                      to={SERVICES[0].to}
-                      className="group flex items-start gap-3 p-4 rounded-xl hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10 transition"
-                      role="menuitem"
-                    >
-                      <div className="shrink-0 w-11 h-11 grid place-items-center rounded-lg bg-white/5">
-                        <FaPlaneDeparture className="text-sand text-xl" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-semibold text-white">{SERVICES[0].title}</div>
-                        <p className="text-xs text-white/70 mt-0.5">{SERVICES[0].desc}</p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      to={SERVICES[1].to}
-                      className="group flex items-start gap-3 p-4 rounded-xl hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10 transition"
-                      role="menuitem"
-                    >
-                      <div className="shrink-0 w-11 h-11 grid place-items-center rounded-lg bg-white/5">
-                        <FaUmbrellaBeach className="text-sand text-xl" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-semibold text-white">{SERVICES[1].title}</div>
-                        <p className="text-xs text-white/70 mt-0.5">{SERVICES[1].desc}</p>
-                      </div>
-                    </Link>
+                    <ServiceItem icon={<FaPlaneDeparture />} data={SERVICES[0]} />
+                    <ServiceItem icon={<FaUmbrellaBeach />} data={SERVICES[1]} />
                   </div>
 
-                  {/* second column - PR Work & PR Study */}
+                  {/* COLUMN 2 */}
                   <div className="space-y-2">
-                    <Link
-                      to={SERVICES[2].to}
-                      className="group flex items-start gap-3 p-4 rounded-xl hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10 transition"
-                      role="menuitem"
-                    >
-                      <div className="shrink-0 w-11 h-11 grid place-items-center rounded-lg bg-white/5">
-                        <FaRoute className="text-sand text-xl" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-semibold text-white">{SERVICES[2].title}</div>
-                        <p className="text-xs text-white/70 mt-0.5">{SERVICES[2].desc}</p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      to={SERVICES[3].to}
-                      className="group flex items-start gap-3 p-4 rounded-xl hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10 transition"
-                      role="menuitem"
-                    >
-                      <div className="shrink-0 w-11 h-11 grid place-items-center rounded-lg bg-white/5">
-                        <FaHotel className="text-sand text-xl" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-semibold text-white">{SERVICES[3].title}</div>
-                        <p className="text-xs text-white/70 mt-0.5">{SERVICES[3].desc}</p>
-                      </div>
-                    </Link>
+                    <ServiceItem icon={<FaRoute />} data={SERVICES[2]} />
+                    <ServiceItem icon={<FaHotel />} data={SERVICES[3]} />
                   </div>
                 </div>
-
-                {/* footer quick links */}
-                {/* <div className="mt-4 flex items-center justify-between">
-                  <Link to="/services" className="text-sm text-white/70 hover:text-white underline">
-                    View all services
-                  </Link>
-                  <div className="text-xs text-white/50">Need help? <Link to="/contact" className="text-sand font-medium">Contact us</Link></div>
-                </div> */}
               </div>
             )}
           </div>
 
-          <Link
-            to="/contact"
-            className={`${link} ${location.pathname === "/contact" ? active : ""}`}
-          >
-            Contact us
+          <Link to="/contact" className={`${link} ${location.pathname === "/contact" ? active : ""}`}>
+            Contact Us
           </Link>
         </nav>
 
-        {/* Mobile Hamburger */}
+        {/* MOBILE BUTTON */}
         <button
-          className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-md bg-white/10 border border-white/15"
+          className="md:hidden w-10 h-10 rounded-md bg-white/10 border border-white/15"
           onClick={() => setOpenMobile(true)}
-          aria-label="Open menu"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="2" />
-          </svg>
+          ☰
         </button>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* MOBILE MENU */}
       {openMobile && (
         <MobilePanel
           onClose={() => setOpenMobile(false)}
@@ -266,72 +198,66 @@ export default function Navbar() {
   );
 }
 
-/* Mobile drawer with collapsible Services group */
+/* SERVICE ITEM */
+function ServiceItem({ icon, data }) {
+  return (
+    <Link
+      to={data.to}
+      className="flex gap-3 p-4 rounded-xl hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10"
+    >
+      <div className="w-11 h-11 grid place-items-center rounded-lg bg-white/5 text-sand text-xl">
+        {icon}
+      </div>
+      <div>
+        <div className="text-sm font-semibold">{data.title}</div>
+        <p className="text-xs text-white/70">{data.desc}</p>
+      </div>
+    </Link>
+  );
+}
+
+/* MOBILE PANEL */
 function MobilePanel({ onClose, mobileServicesOpen, setMobileServicesOpen }) {
   return (
-    <div className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm md:hidden">
-      <div className="absolute right-0 top-0 h-full w-[88%] max-w-sm bg-[#0E1318] text-white shadow-2xl ring-1 ring-white/10">
-        <div className="h-16 px-5 flex items-center justify-between border-b border-white/10">
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-lg bg-black/70 grid place-items-center ring-1 ring-white/10">
-              <span className="text-sand font-bold">PG</span>
-            </div>
-            <div className="font-semibold">Menu</div>
-          </div>
-          <button
-            className="w-10 h-10 grid place-items-center rounded-md bg-white/10"
-            onClick={onClose}
-            aria-label="Close menu"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" />
-            </svg>
-          </button>
+    <div className="fixed inset-0 z-[60] bg-black/70">
+      <div className="absolute right-0 top-0 h-full w-[88%] max-w-sm bg-[#0E1318] ring-1 ring-white/10">
+        <div className="h-16 px-5 flex justify-between items-center border-b border-white/10">
+          <span className="font-semibold">Menu</span>
+          <button onClick={onClose}>✕</button>
         </div>
 
-        <nav className="px-4 py-4 space-y-1">
-          <Link to="/" className="block px-3 py-3 rounded-lg hover:bg-white/5" onClick={onClose}>
-            Home
-          </Link>
-          <Link to="/about" className="block px-3 py-3 rounded-lg hover:bg-white/5" onClick={onClose}>
-            About Us
-          </Link>
+        <nav className="p-4 space-y-1">
+          <MobileLink to="/" label="Home" onClose={onClose} />
+          <MobileLink to="/about" label="About Us" onClose={onClose} />
+          <MobileLink to="/gallery" label="Gallery" onClose={onClose} />
 
-          {/* Services collapsible */}
-          <div className="border-t border-white/5 pt-3">
-            <button
-              onClick={() => setMobileServicesOpen((s) => !s)}
-              className="w-full flex items-center justify-between px-3 py-3 rounded-lg hover:bg-white/5"
-              aria-expanded={mobileServicesOpen}
-            >
-              <div className="flex items-center gap-3">
-                <FaPlaneDeparture className="text-sand" />
-                <span>Services</span>
-              </div>
-              <span>{mobileServicesOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
-            </button>
+          <button
+            onClick={() => setMobileServicesOpen((s) => !s)}
+            className="w-full px-3 py-3 text-left rounded-lg hover:bg-white/5"
+          >
+            Services {mobileServicesOpen ? "▲" : "▼"}
+          </button>
 
-            {mobileServicesOpen && (
-              <div className="mt-2 space-y-1 px-2">
-                {SERVICES.map((s) => (
-                  <Link key={s.to} to={s.to} className="block px-3 py-2 rounded-lg hover:bg-white/5" onClick={onClose}>
-                    <div className="text-sm font-medium">{s.title}</div>
-                    <div className="text-xs text-white/60">{s.desc}</div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
+          {mobileServicesOpen &&
+            SERVICES.map((s) => (
+              <MobileLink key={s.to} to={s.to} label={s.title} onClose={onClose} />
+            ))}
 
-          <Link to="/contact" className="block px-3 py-3 rounded-lg hover:bg-white/5" onClick={onClose}>
-            Contact
-          </Link>
-
-          <Link to="/services" className="block px-3 py-3 rounded-lg hover:bg-white/5" onClick={onClose}>
-            All Services
-          </Link>
+          <MobileLink to="/contact" label="Contact Us" onClose={onClose} />
         </nav>
       </div>
     </div>
+  );
+}
+
+function MobileLink({ to, label, onClose }) {
+  return (
+    <Link
+      to={to}
+      onClick={onClose}
+      className="block px-3 py-3 rounded-lg hover:bg-white/5"
+    >
+      {label}
+    </Link>
   );
 }

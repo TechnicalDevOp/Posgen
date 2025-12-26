@@ -31,14 +31,14 @@ export default function Footer({ onOpenContact }) {
         {/* --- Top Links Section --- */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 border-b border-white/10 pb-10">
           
-          <div>
+          {/* <div>
             <h4 className="text-postgen-gold font-semibold mb-3">Our Branches</h4>
             <ul className="space-y-2 text-sm text-white/80">
               <li>Accra — Head Office</li>
               <li>Kumasi — Branch Office</li>
               <li>Takoradi — Branch Office</li>
             </ul>
-          </div>
+          </div> */}
 
           {/* About Us */}
           <div>

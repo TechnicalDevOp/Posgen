@@ -856,7 +856,7 @@ export function DealsSection() {
             <h2 className="font-display text-3xl md:text-5xl">Our Hot <span className="text-sand">Deals</span></h2>
           </div>
 
-          <Link to="/services/tourist-visa" className="text-sand font-semibold hover:opacity-90">
+          <Link to="/services/tourist" className="text-sand font-semibold hover:opacity-90">
             View all
           </Link>
         </div>
@@ -961,7 +961,7 @@ export function DealCard({ deal, active }) {
           <span>{deal.miles}</span>
         </div>
 
-        <div className="mt-3">
+        {/* <div className="mt-3">
           <Link
             to={`/package/${slugify(deal.city)}-${deal.pkgIndex}`}
             state={{
@@ -974,7 +974,7 @@ export function DealCard({ deal, active }) {
            >
             See Package
         </Link>
-        </div>
+        </div> */}
       </div>
 
       <div className={`absolute inset-0 rounded-3xl ring-2 ${active ? "ring-postgen-gold/60" : "ring-transparent"}`} />
