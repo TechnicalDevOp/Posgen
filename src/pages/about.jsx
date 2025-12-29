@@ -35,10 +35,8 @@ const team = [
     branch: "Accra",
     img: "/images/Accra_sec.jpeg",
     position: "center top",
-    phone: "+233555111112",
-    whatsapp: "+233555111112",
-    googleMap: "https://www.google.com/maps?q=Accra+Ghana",
-    appleMap: "https://maps.apple.com/?q=Accra",
+    
+  
   },
 
   // ===== KUMASI =====
@@ -53,12 +51,9 @@ const team = [
     name: "Akosua Mensah",
     role: "Branch Secretary",
     branch: "Kumasi",
-    img: "/images/ksi_sec.jpeg",
+    img: "/images/ksi_sectary.jpeg",
     position: "center top",
-    phone: "+233555222222",
-    whatsapp: "+233555222222",
-    googleMap: "https://www.google.com/maps?q=Kumasi+Ghana",
-    appleMap: "https://maps.apple.com/?q=Kumasi",
+   
   },
 
   // ===== TAMALE =====
@@ -68,10 +63,7 @@ const team = [
     branch: "Tamale",
     img: "/images/tam_sec.jpg",
     position: "center top",
-    phone: "+233555333333",
-    whatsapp: "+233555333333",
-    googleMap: "https://www.google.com/maps?q=Tamale+Ghana",
-    appleMap: "https://maps.apple.com/?q=Tamale",
+  
   },
 ];
 

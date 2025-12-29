@@ -1,57 +1,34 @@
+// src/pages/Gallery.jsx
 import Navbar from "../components/Nav";
 import Footer from "../components/foot";
 
 const galleryImages = [
-  {
-    src: "images/gallery17.jpeg",
-    // title: "International Flights",
-  },
-  {
-    // src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
-    src: "images/gallery16.jpeg",
-    // title: "Luxury Destinations",
-  },
-  {
-    // src: "https://images.unsplash.com/photo-1502920514313-52581002a659",
-    src: "images/gallery2.jpeg",
-    // title: "Airport Experience",
-  },
-  {
-    // src: "https://images.unsplash.com/photo-1526772662000-3f88f10405ff",
-    src: "images/gallery27.jpeg",
-    // title: "Tour Adventures",
-  },
-  {
-    // src: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-    // src: "images/gallery28.jpeg",
-    // title: "Beach Getaways",
-  },
-  {
-    // src: "https://images.unsplash.com/photo-1488646953014-85cb44e25828",
-    src: "images/gallery5.jpeg",
-    // title: "City Escapes",
-  },
-  {
-    // src: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c",
-    // src: "images/gallery6.jpeg",
-    // title: "Dubai Experience",
-  },
-  {
-    // src: "https://images.unsplash.com/photo-1494475673543-6a6a27143b16",
-    // src: "images/gallery12.jpeg",
-    // title: "Mountain Views",
-  },
-  {
-    // src: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
-    src: "images/gallery10.jpeg",
-    // title: "Nature Tours",
-  },
-
-    {
-    // src: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c",
-    src: "images/gallery9.jpeg",
-    // title: "Dubai Experience",
-  },
+  "/images/gallery17.jpeg",
+  "/images/gallery16.jpeg",
+  "/images/gallery2.jpeg",
+  "/images/gallery27.jpeg",
+  "/images/gallery5.jpeg",
+  "/images/gallery10.jpeg",
+  "/images/gallery1.jpeg",
+  "/images/gallery11.jpeg",
+  "/images/gallery.jpeg",
+  "/images/gallery3.jpeg",
+  "/images/gallery4.jpeg",
+  "/images/gallery5.jpeg",
+  "/images/gallery6.jpeg",
+  "/images/gallery12.jpeg",
+  "/images/gallery13.jpeg",
+  "/images/gallery14.jpeg",
+  "/images/gallery15.jpeg",
+  "/images/gallery18.jpeg",
+  "/images/gallery19.jpeg",
+  "/images/gallery22.jpeg",
+  "/images/gallery23.jpeg",
+  "/images/gallery24.jpeg",
+  "/images/gallery25.jpeg",
+  "/images/gallery26.jpeg",
+  "/images/gallery28.jpeg",
+  "/images/gallery9.jpeg",
 ];
 
 export default function Gallery() {
@@ -60,51 +37,54 @@ export default function Gallery() {
       <Navbar />
 
       {/* HERO */}
-      <section className="relative h-[50vh] flex items-center justify-center">
+      <section className="relative h-[55vh] flex items-center justify-center">
         <img
-          src="https://images.unsplash.com/photo-1469474968028-56623f02e42e"
-          alt="Travel gallery"
+          src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1800&auto=format&fit=crop"
+          alt="Gallery hero"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/65" />
+        <div className="absolute inset-0 bg-black/70" />
+
         <div className="relative z-10 text-center px-6">
           <h1 className="text-4xl md:text-6xl font-display font-semibold">
             Posgen <span className="text-sand">Gallery</span>
           </h1>
-          <p className="mt-4 text-white/80 max-w-2xl mx-auto">
-            Moments from journeys, destinations, and unforgettable experiences
+          <p className="mt-4 text-white/80 max-w-3xl mx-auto text-lg">
+            Real airport moments, successful travels, and unforgettable journeys.
           </p>
         </div>
       </section>
 
       {/* GALLERY GRID */}
-      <section className="max-w-7xl mx-auto px-6 py-20">
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {galleryImages.map((img, i) => (
-            <div
-              key={i}
-              className="group relative overflow-hidden rounded-3xl ring-1 ring-white/10 bg-white/5"
-            >
-              <img
-                src={`${img.src}?q=80&w=1200&auto=format&fit=crop`}
-                alt={img.title}
-                className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
-                loading="lazy"
-              />
-
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
-              {/* Caption */}
-              <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                <h3 className="text-lg font-semibold text-sand">
-                  {img.title}
-                </h3>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* GALLERY GRID */}
+<section className="max-w-7xl mx-auto px-6 py-24">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {galleryImages.map((src, index) => (
+      <div
+        key={index}
+        className="overflow-hidden rounded-3xl"
+      >
+        <img
+          src={src}
+          alt={`Gallery image ${index + 1}`}
+          loading="lazy"
+          onError={(e) => {
+            e.currentTarget.src = "/images/fallback.jpg";
+          }}
+          className="
+            w-full
+            h-[520px]
+            object-contain
+            bg-transparent
+            transition-transform
+            duration-500
+            hover:scale-105
+          "
+        />
+      </div>
+    ))}
+  </div>
+</section>
 
       <Footer />
     </main>

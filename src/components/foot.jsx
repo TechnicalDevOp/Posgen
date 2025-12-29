@@ -133,7 +133,7 @@ export default function Footer({ onOpenContact }) {
 
               <a
                 aria-label="TikTok"
-                href="https://www.tiktok.com/@posgen"
+                href="https://www.tiktok.com/@https://www.tiktok.com/@posgen.traveling?_r=1&_t=ZS-92H8TNiE2YS"
                 target="_blank"
                 rel="noreferrer"
                 className="hover:text-postgen-gold"

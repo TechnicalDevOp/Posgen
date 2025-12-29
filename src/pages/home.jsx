@@ -737,17 +737,46 @@ function ExperienceSection() {
 // import { Link } from "react-router-dom";
 
 /* small helpers (matching your data shape) */
+
+/* -------------------- helpers -------------------- */
 function slugify(text = "") {
-  return String(text || "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  return String(text || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 }
-function getCountryFromRow(p) { return (p && (p[""] || p.country || p.Country || "") || "").toString(); }
-function getVisaFromRow(p) { return (p && (p._1 || p.visaType || p._type || "") || "").toString(); }
-function getRoleFromRow(p) { return (p && (p._2 || p.role || "") || "").toString(); }
+
+function getCountryFromRow(p) {
+  return (p && (p[""] || p.country || p.Country || "") || "").toString();
+}
+
+function getVisaFromRow(p) {
+  return (p && (p._1 || p.visaType || p._type || "") || "").toString();
+}
+
+function getRoleFromRow(p) {
+  return (p && (p._2 || p.role || "") || "").toString();
+}
+
 function parseCostAndCurrency(p) {
-  const fields = [p && p._7, p && p._5, p && p.cost, p && p.salary, p && p.COST, p && p["COST"], p && p._8]
-    .filter(Boolean).map(String);
+  const fields = [
+    p && p._7,
+    p && p._5,
+    p && p.cost,
+    p && p.salary,
+    p && p.COST,
+    p && p["COST"],
+    p && p._8,
+  ]
+    .filter(Boolean)
+    .map(String);
+
   const joined = fields.join(" ").replace(/\u00A0/g, " ");
-  const currencyMatch = joined.match(/\b(USD|EUR|GHS|AED|QAR|CAD|GBP|US\$|€|dollars|euros|cedis)\b/i);
+  const currencyMatch = joined.match(
+    /\b(USD|EUR|GHS|AED|QAR|CAD|GBP|US\$|€|dollars|euros|cedis)\b/i
+  );
+
   let currency = currencyMatch ? currencyMatch[0] : null;
   if (currency) {
     currency = currency.replace("US$", "USD").replace("€", "EUR").toUpperCase();
@@ -755,35 +784,39 @@ function parseCostAndCurrency(p) {
     if (/euros/i.test(currency)) currency = "EUR";
     if (/cedis/i.test(currency)) currency = "GHS";
   }
-  const numMatch = joined.replace(/[,]/g, "").match(/(\d+(\.\d+)?)/);
+
+  const numMatch = joined.replace(/,/g, "").match(/(\d+(\.\d+)?)/);
   const amount = numMatch ? Number(numMatch[0]) : null;
   const raw = fields.length ? fields[0] : "";
+
   return { amount, currency, raw };
 }
 
-/* Build image candidates:
-   - local: /images/<slug>.jpg (works if files are in public/images/)
-   - unsplash: https://source.unsplash.com/800x600/?<country>
-   - placeholder: /images/placeholder.jpg
-*/
-function buildImageCandidates(country) {
+/* -------------------- image builder -------------------- */
+function buildImageCandidates(country, seed) {
   const slug = slugify(country || "placeholder");
+
   return {
-    local: `/images/${slug}.jpg`,
-    unsplash: `https://source.unsplash.com/800x600/?${encodeURIComponent(country || "travel")}`,
-    placeholder: `/images/placeholder.jpg`,
+    local: `/images/${slug}-${seed}.jpg`,
+    unsplash: `https://source.unsplash.com/800x600/?${encodeURIComponent(
+      country || "travel"
+    )}&sig=${seed}`,
+    placeholder:
+      "https://images.unsplash.com/photo-1502920514313-52581002a659",
   };
 }
 
-/* DealsSection - loads tourist/visit packages and displays them */
+/* -------------------- Deals Section -------------------- */
 export function DealsSection() {
-  const [i, setI] = useState(0);
+  const [index, setIndex] = useState(0);
   const [deals, setDeals] = useState([]);
-  const next = () => setI((p) => (p + 1) % deals.length);
-  const prev = () => setI((p) => (p - 1 + deals.length) % deals.length);
+
+  const next = () => setIndex((p) => (p + 1) % deals.length);
+  const prev = () => setIndex((p) => (p - 1 + deals.length) % deals.length);
 
   useEffect(() => {
     let mounted = true;
+
     (async () => {
       try {
         const res = await fetch("/data/packages_clean.json");
@@ -791,16 +824,19 @@ export function DealsSection() {
         const arr = await res.json();
 
         const tourist = [];
-        for (let idx = 0; idx < arr.length; idx += 1) {
-          const row = arr[idx];
+
+        arr.forEach((row, idx) => {
           const visa = (getVisaFromRow(row) || "").toLowerCase();
-          // include tourist/visit visitor/tour
           if (/tourist|visit|visitor|tour/i.test(visa)) {
             const country = getCountryFromRow(row) || "Unknown";
             const role = getRoleFromRow(row) || "Tourist Visa";
             const { amount, currency, raw } = parseCostAndCurrency(row);
-            const priceLabel = amount != null ? `from ${currency || "GHS"} ${amount.toLocaleString()}` : (raw || "Contact us");
-            const imgs = buildImageCandidates(country);
+            const priceLabel =
+              amount != null
+                ? `from ${currency || "GHS"} ${amount.toLocaleString()}`
+                : raw || "Contact us";
+
+            const imgs = buildImageCandidates(country, idx);
 
             tourist.push({
               id: `${slugify(country)}-${idx}`,
@@ -808,179 +844,128 @@ export function DealsSection() {
               from: role,
               price: priceLabel,
               miles: row._miles || row.miles || "",
+              tag: "Tourist Visa",
               imgLocal: imgs.local,
               imgUnsplash: imgs.unsplash,
               imgPlaceholder: imgs.placeholder,
-              tag: "Tourist Visa",
               pkgIndex: idx,
               rawPackage: row,
             });
           }
-        }
+        });
 
-        // choose up to 5 deals (or fewer)
-        const top = tourist.slice(0, 5);
         if (mounted) {
-          setDeals(top);
-          setI(0);
+          setDeals(tourist.slice(0, 5));
+          setIndex(0);
         }
       } catch (err) {
         console.error("DealsSection load error:", err);
         if (mounted) setDeals([]);
       }
     })();
+
     return () => (mounted = false);
   }, []);
 
-  if (!deals || deals.length === 0) {
-    return (
-      <section className="bg-[#0A0E12] text-white py-12">
-        <div className="max-w-7xl mx-auto px-5 text-center">
-          <p className="text-white/70">Discover our tourist visa packages</p>
-          <h2 className="font-display text-3xl md:text-4xl">Hot <span className="text-sand">Deals</span></h2>
-          <p className="mt-4 text-white/60">No deals available right now — visit the tourist visa page for full offers.</p>
-          <div className="mt-6">
-            <Link to="/services/tourist-visa" className="px-4 py-2 rounded-lg bg-sand text-black font-semibold">View tourist visa packages</Link>
-          </div>
-        </div>
-      </section>
-    );
+  if (!deals.length) {
+    return null;
   }
 
   return (
-    <section className="bg-[#0A0E12] text-white py-16 md:py-24">
+    <section className="bg-[#0A0E12] text-white py-20">
       <div className="max-w-7xl mx-auto px-5">
-        <div className="flex items-end justify-between mb-10">
-          <div>
-            <p className="text-white/70 text-sm">Top tourist visa packages</p>
-            <h2 className="font-display text-3xl md:text-5xl">Our Hot <span className="text-sand">Deals</span></h2>
-          </div>
-
-          <Link to="/services/tourist" className="text-sand font-semibold hover:opacity-90">
+        <div className="flex justify-between mb-10">
+          <h2 className="text-4xl font-display">
+            Our Hot <span className="text-sand">Deals</span>
+          </h2>
+          <Link to="/services/tourist" className="text-sand font-semibold">
             View all
           </Link>
         </div>
 
-        <div className="relative">
-          <div className="relative h-[360px] md:h-[420px]">
-            {deals.map((d, idx) => {
-              const pos = (idx - i + deals.length) % deals.length;
-              const norm = pos > deals.length / 2 ? pos - deals.length : pos;
-              const translate = norm * 220;
-              const scale = 1 - Math.abs(norm) * 0.12;
-              const z = 10 - Math.abs(norm);
-              const opacity = 1 - Math.abs(norm) * 0.25;
-              return (
-                <article
-                  key={d.id}
-                  className="absolute left-1/2 top-1/2"
-                  style={{
-                    transform: `translate(-50%, -50%) translateX(${translate}px) scale(${scale})`,
-                    zIndex: z,
-                    opacity,
-                    transition: "transform 450ms ease, opacity 300ms ease",
-                  }}
-                >
-                  <DealCard deal={d} active={norm === 0} />
-                </article>
-              );
-            })}
-          </div>
+        <div className="relative h-[420px]">
+          {deals.map((deal, i) => {
+            const pos = (i - index + deals.length) % deals.length;
+            const norm = pos > deals.length / 2 ? pos - deals.length : pos;
 
-          <div className="mt-8 flex items-center justify-center gap-4">
-            <button onClick={prev} className="size-9 grid place-items-center rounded-full border border-white/20 hover:bg-white/10" aria-label="Previous">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 6L9 12l6 6" stroke="currentColor" strokeWidth="2"/></svg>
-            </button>
+            return (
+              <div
+                key={deal.id}
+                className="absolute left-1/2 top-1/2"
+                style={{
+                  transform: `translate(-50%, -50%) translateX(${
+                    norm * 220
+                  }px) scale(${1 - Math.abs(norm) * 0.12})`,
+                  zIndex: 10 - Math.abs(norm),
+                  opacity: 1 - Math.abs(norm) * 0.25,
+                  transition: "all 400ms ease",
+                }}
+              >
+                <DealCard deal={deal} active={norm === 0} />
+              </div>
+            );
+          })}
+        </div>
 
-            <div className="flex gap-2">
-              {deals.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setI(idx)}
-                  className={`h-2 rounded-full transition-all ${i === idx ? "w-6 bg-postgen-gold" : "w-2 bg-white/35"}`}
-                  aria-label={`Go to slide ${idx + 1}`}
-                />
-              ))}
-            </div>
-
-            <button onClick={next} className="size-9 grid place-items-center rounded-full border border-white/20 hover:bg-white/10" aria-label="Next">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2"/></svg>
-            </button>
-          </div>
+        <div className="mt-8 flex justify-center gap-4">
+          <button onClick={prev}>◀</button>
+          <button onClick={next}>▶</button>
         </div>
       </div>
     </section>
   );
 }
 
-/* DealCard: robust fallback handling (local -> unsplash -> placeholder) */
+/* -------------------- Deal Card -------------------- */
 export function DealCard({ deal, active }) {
-  const triedRef = useRef({ unsplash: false });
-  const [src, setSrc] = useState(deal.imgLocal || deal.imgUnsplash || deal.imgPlaceholder);
+  const tried = useRef(false);
+  const [src, setSrc] = useState(
+    deal.imgLocal || deal.imgUnsplash || deal.imgPlaceholder
+  );
 
   useEffect(() => {
-    // reset when deal changes
     setSrc(deal.imgLocal || deal.imgUnsplash || deal.imgPlaceholder);
-    triedRef.current.unsplash = false;
+    tried.current = false;
   }, [deal]);
 
-  const handleImgError = (e) => {
-    // try Unsplash once if we haven't yet and there is a fallback url
-    if (!triedRef.current.unsplash && deal.imgUnsplash && e.currentTarget.src !== deal.imgUnsplash) {
-      triedRef.current.unsplash = true;
+  const onError = () => {
+    if (!tried.current && deal.imgUnsplash) {
+      tried.current = true;
       setSrc(deal.imgUnsplash);
-      return;
-    }
-    // otherwise final fallback
-    if (e.currentTarget.src !== deal.imgPlaceholder) {
+    } else {
       setSrc(deal.imgPlaceholder);
     }
   };
 
   return (
-    <div className="w-[240px] h-[300px] md:w-[420px] md:h-[280px] rounded-3xl overflow-hidden relative ring-1 ring-white/10 shadow-lg bg-[#071018]">
+    <div className="w-[420px] h-[280px] rounded-3xl overflow-hidden relative bg-black">
       <img
         src={src}
         alt={deal.city}
         className="absolute inset-0 w-full h-full object-cover"
+        onError={onError}
         loading="lazy"
-        onError={handleImgError}
       />
 
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
-      <div className="absolute left-4 top-3">
-        <span className="text-[11px] md:text-xs px-3 py-1 rounded-full bg-white/85 text-black/80">{deal.tag}</span>
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30" />
 
-      <div className="absolute inset-x-0 bottom-0 p-4 md:p-5 text-white">
+      <div className="absolute bottom-0 p-5 text-white">
         <div className="text-sm opacity-80">{deal.from}</div>
-        <div className="text-xl md:text-2xl font-semibold">{deal.city}</div>
-        <div className="mt-1 flex items-center gap-3 text-xs md:text-sm opacity-90">
-          <span className="font-semibold text-postgen-gold">{deal.price}</span>
-          <span className="opacity-70">•</span>
-          <span>{deal.miles}</span>
+        <div className="text-2xl font-semibold">{deal.city}</div>
+        <div className="text-postgen-gold font-semibold mt-1">
+          {deal.price}
         </div>
-
-        {/* <div className="mt-3">
-          <Link
-            to={`/package/${slugify(deal.city)}-${deal.pkgIndex}`}
-            state={{
-              pkg: deal.rawPackage,            // full package row object
-              image: src,                      // current image URL (optional)
-              pkgId: `${slugify(deal.city)}-${deal.pkgIndex}`,
-              originalIndex: deal.pkgIndex
-            }}
-            className="inline-block px-3 py-2 rounded-lg bg-sand text-black font-semibold text-sm"
-           >
-            See Package
-        </Link>
-        </div> */}
       </div>
 
-      <div className={`absolute inset-0 rounded-3xl ring-2 ${active ? "ring-postgen-gold/60" : "ring-transparent"}`} />
+      <div
+        className={`absolute inset-0 ring-2 rounded-3xl ${
+          active ? "ring-postgen-gold/60" : "ring-transparent"
+        }`}
+      />
     </div>
   );
 }
+
 
 
 
@@ -1305,29 +1290,29 @@ function Testimonials() {
 const POSGEN_BRANCHES = [
   {
     city: "Accra",
-    address: "Anyaa-Awoshie Road, Ablekuma Fanmilk, Ga Central Municipal District, Accra, Ghana",
+    address:
+      "Anyaa-Awoshie Road, Ablekuma Fanmilk, Ga Central Municipal District, Accra, Ghana",
     phone: "+233 24 395 5621",
     email: "posgentravelingconsult@gmail.com",
-    lat: 5.6037,
-    lon: -0.1870,
+    mapQuery:
+      "Anyaa-Awoshie Road Ablekuma Fanmilk Accra Ghana",
   },
   {
     city: "Kumasi",
     address: "Ayeduase Gate, Kumasi, Ghana",
     phone: "+233 54 777 1233",
     email: "posgentravelingconsult@gmail.com",
-    lat: 6.6885,
-    lon: -1.6244,
+    mapQuery: "Ayeduase Gate Kumasi Ghana",
   },
   {
     city: "Tamale",
-    address: "Buy water Area, Tamale, Ghana",
+    address: "Buy Water Area, Tamale, Ghana",
     phone: "+233 55 312 4987",
     email: "posgentravelingconsult@gmail.com",
-    lat: 4.8845,
-    lon: -1.7554,
+    mapQuery: "Buy Water Area Tamale Ghana",
   },
 ];
+
 
 
 function BranchesSection() {
@@ -1345,9 +1330,17 @@ function BranchesSection() {
         {/* Branch cards */}
         <div className="grid md:grid-cols-3 gap-8">
           {POSGEN_BRANCHES.map((b, i) => {
-            const googleEmbed = `https://www.google.com/maps?q=${b.lat},${b.lon}&z=15&output=embed`;
-            const googleMaps = `https://www.google.com/maps/search/?api=1&query=${b.lat},${b.lon}`;
-            const appleMaps = `https://maps.apple.com/?q=${b.lat},${b.lon}`;
+            const googleEmbed = `https://www.google.com/maps?q=${encodeURIComponent(
+  b.mapQuery
+)}&z=15&output=embed`;
+
+const googleMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  b.mapQuery
+)}`;
+
+const appleMaps = `https://maps.apple.com/?q=${encodeURIComponent(
+  b.mapQuery
+)}`;
 
             return (
               <div
@@ -1469,7 +1462,7 @@ function Footer() {
                          </a>
             <a
                             aria-label="TikTok"
-                            href="https://www.tiktok.com/@posgen"
+                            href="https://www.tiktok.com/@posgen.traveling?_r=1&_t=ZS-92H8TNiE2YS"
                             target="_blank"
                             rel="noreferrer"
                             className="hover:text-postgen-gold"

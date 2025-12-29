@@ -98,7 +98,7 @@ export default function VisitPage() {
         <div className="max-w-7xl mx-auto">
           {/* Hero */}
           <header className="mb-6">
-            <h1 className="text-3xl md:text-4xl font-semibold text-sand">Visit & Tourist Packages</h1>
+            <h1 className="text-3xl md:text-4xl font-semibold text-sand">Visit Packages</h1>
             <p className="text-white/70 mt-2 max-w-2xl">
               Explore curated visit / tourist visa packages. Filter by country, profession and budget — fast and secure.
             </p>
