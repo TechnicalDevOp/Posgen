@@ -18,7 +18,6 @@ import { Link } from "react-router-dom";
 // import { FaMapMarkerAlt, FaCalendarAlt, FaUser } from "react-icons/fa";
 // import ResultsModal from "../components/ResultsModal.jsx";
 import SearchBar from "../components/SearchBar.jsx";
-import { useNavigate } from "react-router-dom";
 
 
 
@@ -37,7 +36,9 @@ function VideoCarousel({ sources, duration = 9000 }) {
     vidsRef.current.forEach((v, i) => {
       if (!v) return;
       if (i === idx) {
-        try { v.currentTime = 0; v.play(); } catch {}
+        try { v.currentTime = 0; v.play(); } catch {
+          // ignore
+        }
       } else {
         v.pause();
       }
@@ -310,7 +311,9 @@ function Chatbot() {
         setText(saved.text ?? "");
         setMode(saved.mode ?? "chat");
       }
-    } catch {}
+    } catch {
+      // ignore
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -718,7 +721,7 @@ function ExperienceSection() {
         {/* Optional Image */}
         <div className="mt-16 rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-[0_25px_70px_rgba(0,0,0,0.35)]">
           <img
-            src="public/videos/black.jpg"
+            src="videos/black.jpg"
             alt="Luxury travel experience"
             className="w-full h-[300px] md:h-[500px] object-cover"
             loading="lazy"
@@ -1019,7 +1022,7 @@ function WhyChoosePostgen() {
         {/* Left side — image */}
         <div className="relative overflow-hidden rounded-3xl ring-1 ring-white/10 shadow-[0_25px_70px_rgba(0,0,0,0.35)] hidden lg:block">
           <img
-            src="public/videos/images.png"
+            src="videos/images.png"
             alt="Traveler luxury experience"
             className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
             loading="lazy"
@@ -1125,7 +1128,7 @@ function WhyChoosePostgen() {
 
 
 function Avatar({ src, alt, className = "" }) {
-  const fallback = "public/videos/avatar-fallback.jpg"; // put a 300x300 jpg in public/images/
+  const fallback = "videos/avatar-fallback.jpg"; // put a 300x300 jpg in public/images/
   return (
     <img
       src={src}

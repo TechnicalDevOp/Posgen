@@ -1,7 +1,7 @@
 @import "tailwindcss";
- @tailwind base;
-@tailwind components;
-@tailwind utilities; 
+/* @tailwind base;
+@tailwind components; */
+@tailwind utilities;
 
 /* :root {
   --posgen-red: #C62828;
@@ -15,45 +15,108 @@
 
 /* === POSTGEN BRAND COLORS === */
 :root {
-  --postgen-sand: #C49B6C;        /* warm sand-copper tone */
-  --postgen-copper: #B87333;      /* deep copper accent */
-  --postgen-gold: #D4AF37;        /* classic gold highlight */
-  --postgen-charcoal: #0A0E12;    /* base background */
+  --postgen-sand: #C49B6C;
+  /* warm sand-copper tone */
+  --postgen-copper: #B87333;
+  /* deep copper accent */
+  --postgen-gold: #D4AF37;
+  /* classic gold highlight */
+  --postgen-charcoal: #0A0E12;
+  /* base background */
 }
 
 /* === COLOR HELPERS === */
-.text-sand { color: var(--postgen-sand); }
-.bg-sand { background-color: var(--postgen-sand); }
-.ring-sand { --tw-ring-color: var(--postgen-sand); }
-.fill-sand { fill: var(--postgen-sand); }
-.stroke-sand { stroke: var(--postgen-sand); }
+.text-sand {
+  color: var(--postgen-sand);
+}
 
-.text-copper { color: var(--postgen-copper); }
-.bg-copper { background-color: var(--postgen-copper); }
-.ring-copper { --tw-ring-color: var(--postgen-copper); }
-.fill-copper { fill: var(--postgen-copper); }
-.stroke-copper { stroke: var(--postgen-copper); }
+.bg-sand {
+  background-color: var(--postgen-sand);
+}
 
-.text-gold { color: var(--postgen-gold); }
-.bg-gold { background-color: var(--postgen-gold); }
-.ring-gold { --tw-ring-color: var(--postgen-gold); }
-.fill-gold { fill: var(--postgen-gold); }
-.stroke-gold { stroke: var(--postgen-gold); }
+.ring-sand {
+  --tw-ring-color: var(--postgen-sand);
+}
+
+.fill-sand {
+  fill: var(--postgen-sand);
+}
+
+.stroke-sand {
+  stroke: var(--postgen-sand);
+}
+
+.text-copper {
+  color: var(--postgen-copper);
+}
+
+.bg-copper {
+  background-color: var(--postgen-copper);
+}
+
+.ring-copper {
+  --tw-ring-color: var(--postgen-copper);
+}
+
+.fill-copper {
+  fill: var(--postgen-copper);
+}
+
+.stroke-copper {
+  stroke: var(--postgen-copper);
+}
+
+.text-gold {
+  color: var(--postgen-gold);
+}
+
+.bg-gold {
+  background-color: var(--postgen-gold);
+}
+
+.ring-gold {
+  --tw-ring-color: var(--postgen-gold);
+}
+
+.fill-gold {
+  fill: var(--postgen-gold);
+}
+
+.stroke-gold {
+  stroke: var(--postgen-gold);
+}
 
 /* Smooth scrolling */
-html { scroll-behavior: smooth; }
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+html {
+  scroll-behavior: smooth;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.25s ease-out;
 }
 
 @keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
+
 .animate-slideUp {
   animation: slideUp 0.35s ease-out;
 }

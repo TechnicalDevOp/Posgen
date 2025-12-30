@@ -1,0 +1,58 @@
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+dist
+dist-ssr
+*.local
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Documentation
+README.md
+.github
+
+# Unused files
+server.js
+db.json
+scripts/
+convert.cjs
+packages_clean.csv
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+deploy.sh
+build.sh
+logs.sh
+
+# Testing
+coverage
+*.test.js
+*.spec.js
